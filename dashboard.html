@@ -3,355 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audesign Analytics - Dashboard Profesional</title>
+    <title>Audesign Analytics - Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8fafc; color: #1e293b; }
         .hidden { display: none !important; }
-
-        #loginPage {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-        }
-
-        .login-card {
-            background: white;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            width: 100%;
-            max-width: 450px;
-        }
-
-        .login-card h1 {
-            font-size: 28px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
-        }
-
-        .login-card p {
-            color: #64748b;
-            margin-bottom: 32px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .error-msg {
-            color: #ef4444;
-            background: #fee2e2;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 16px;
-        }
-
-        #dashboardPage {
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .header {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
+        #loginPage { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; }
+        .login-card { background: white; padding: 40px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); width: 100%; max-width: 450px; }
+        .login-card h1 { font-size: 28px; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+        .login-card p { color: #64748b; margin-bottom: 32px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
+        .form-group input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+        .btn-primary { width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 20px; }
+        .error-msg { color: #ef4444; background: #fee2e2; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+        #dashboardPage { padding: 20px; max-width: 1400px; margin: 0 auto; }
+        .header { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .header h1 { font-size: 24px; }
-
-        .btn-logout {
-            padding: 10px 20px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .filters {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 15px;
-            align-items: end;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .filter-group label {
-            font-weight: 600;
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        .filter-group input, .filter-group select {
-            padding: 10px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .btn-filter {
-            padding: 10px 20px;
-            background: #3b82f6;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .kpis {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .kpi {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .kpi-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #64748b;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        .kpi-value {
-            font-size: 28px;
-            font-weight: 700;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 8px;
-            background: white;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e2e8f0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            overflow-x: auto;
-        }
-
-        .tab-btn {
-            padding: 10px 20px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            color: #64748b;
-            border-bottom: 3px solid transparent;
-            white-space: nowrap;
-        }
-
-        .tab-btn.active {
-            color: #3b82f6;
-            border-bottom-color: #3b82f6;
-        }
-
+        .btn-logout { padding: 10px 20px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .filters { background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; align-items: end; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .filter-group { display: flex; flex-direction: column; gap: 8px; }
+        .filter-group label { font-weight: 600; font-size: 13px; color: #64748b; }
+        .filter-group input, .filter-group select { padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 14px; }
+        .btn-filter { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
+        .kpi { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .kpi-label { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; margin-bottom: 8px; }
+        .kpi-value { font-size: 28px; font-weight: 700; }
+        .tabs { display: flex; gap: 8px; background: white; padding: 12px; border-radius: 12px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow-x: auto; }
+        .tab-btn { padding: 10px 20px; background: none; border: none; cursor: pointer; font-weight: 600; color: #64748b; border-bottom: 3px solid transparent; white-space: nowrap; }
+        .tab-btn.active { color: #3b82f6; border-bottom-color: #3b82f6; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
-        .card {
-            background: white;
-            padding: 24px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
+        .card { background: white; padding: 24px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .card h2 { margin-bottom: 20px; font-size: 18px; }
-
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 20px;
-        }
-
-        .chart-box {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
+        .chart-box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .chart-box h3 { margin-bottom: 15px; font-size: 14px; font-weight: 600; }
-
-        .table-responsive { overflow-x: auto; }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
         thead { background: #f1f5f9; }
-        th {
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            color: #475569;
-            border-bottom: 2px solid #e2e8f0;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
+        th { padding: 12px; text-align: left; font-weight: 600; color: #475569; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 12px; border-bottom: 1px solid #e2e8f0; }
         tbody tr:hover { background: #f8fafc; }
-
         .status-active { color: #10b981; font-weight: 600; }
-        .status-inactive { color: #64748b; }
         .roas-good { color: #10b981; font-weight: 600; }
         .roas-bad { color: #ef4444; font-weight: 600; }
-
-        .recommendations {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .recommendations h4 {
-            margin-bottom: 12px;
-            color: #92400e;
-            font-weight: 600;
-        }
-
-        .rec-item {
-            padding: 6px 0;
-            color: #92400e;
-            font-size: 14px;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .spinner {
-            border: 4px solid #e2e8f0;
-            border-top-color: #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 768px) {
-            .charts-grid { grid-template-columns: 1fr; }
-            .filters { grid-template-columns: 1fr; }
-            .header { flex-direction: column; gap: 16px; }
-        }
     </style>
 </head>
 <body>
-    <!-- LOGIN -->
     <div id="loginPage">
         <div class="login-card">
             <h1>📊 Audesign Analytics</h1>
             <p>Dashboard Profesional Meta Ads</p>
-            
             <div id="errorBox" class="error-msg hidden"></div>
-            
             <div class="form-group">
                 <label>Email</label>
                 <input type="email" id="emailInput" value="jtagency.info@gmail.com" readonly>
             </div>
-            
             <div class="form-group">
                 <label>Contraseña</label>
                 <input type="password" id="passwordInput" placeholder="Contraseña">
             </div>
-            
             <button class="btn-primary" onclick="login()">Entrar</button>
         </div>
     </div>
 
-    <!-- DASHBOARD -->
     <div id="dashboardPage" class="hidden">
         <div class="header">
             <h1>📊 Audesign Analytics</h1>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-filter" onclick="syncData()">🔄 Sincronizar</button>
-                <button class="btn-logout" onclick="logout()">Logout</button>
-            </div>
-        </div>
-
-        <div id="loadingIndicator" class="loading hidden">
-            <div class="spinner"></div>
-            <p>Cargando datos...</p>
+            <button class="btn-logout" onclick="logout()">Logout</button>
         </div>
 
         <div class="filters">
@@ -375,12 +97,11 @@
         </div>
 
         <div class="kpis" id="kpisContainer"></div>
-        <div id="recommendationsContainer"></div>
 
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('overview')">📊 General</button>
-            <button class="tab-btn" onclick="switchTab('weekly')">📅 Informe Semanal</button>
-            <button class="tab-btn" onclick="switchTab('campaigns')">📋 Todas las Campañas</button>
+            <button class="tab-btn" onclick="switchTab('weekly')">📅 Informe</button>
+            <button class="tab-btn" onclick="switchTab('campaigns')">📋 Campañas</button>
         </div>
 
         <div id="overview" class="tab-content active">
@@ -407,47 +128,38 @@
         <div id="weekly" class="tab-content">
             <div class="card">
                 <h2>📅 Informe Semanal</h2>
-                <div class="filters">
-                    <div class="filter-group">
-                        <label>Desde</label>
-                        <input type="date" id="reportFrom">
-                    </div>
-                    <div class="filter-group">
-                        <label>Hasta</label>
-                        <input type="date" id="reportTo">
-                    </div>
-                    <button class="btn-filter" onclick="generateReport()">Generar</button>
-                </div>
-                <div id="reportContainer" style="margin-top: 20px;"></div>
+                <div id="reportContainer"></div>
             </div>
         </div>
 
         <div id="campaigns" class="tab-content">
             <div class="card">
                 <h2>📋 Todas las Campañas</h2>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Campaña</th>
-                                <th>Estado</th>
-                                <th>Gasto</th>
-                                <th>Impresiones</th>
-                                <th>CPM</th>
-                                <th>Conversiones</th>
-                                <th>ROAS</th>
-                            </tr>
-                        </thead>
-                        <tbody id="campaignsTable"></tbody>
-                    </table>
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Campaña</th>
+                            <th>Estado</th>
+                            <th>Gasto</th>
+                            <th>Impresiones</th>
+                            <th>CPM</th>
+                            <th>Conversiones</th>
+                            <th>ROAS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="campaignsTable"></tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
-        const BACKEND_URL = 'https://audesign-analytics-api.vercel.app';
-        
+        const mockData = [
+            { name: "CBO - Mainstech", status: "ACTIVE", spent: 1090.54, impressions: 118355, cpm: 9.21, conversions: 61, roas: 1.21 },
+            { name: "CBO VOCALIXIR", status: "ACTIVE", spent: 854.24, impressions: 54264, cpm: 15.74, conversions: 49, roas: 1.21 },
+            { name: "COSTPERGOAL 12", status: "ACTIVE", spent: 33.00, impressions: 2714, cpm: 12.16, conversions: 5, roas: 3.48 }
+        ];
+
         let allCampaigns = [];
         let filteredCampaigns = [];
         let charts = {};
@@ -465,102 +177,45 @@
             }
         }
 
-        async function loadCampaigns() {
-            document.getElementById('loadingIndicator').classList.remove('hidden');
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/campaigns`);
-                const data = await response.json();
-
-                allCampaigns = data.data || [];
-                filteredCampaigns = allCampaigns;
-
-                document.getElementById('loadingIndicator').classList.add('hidden');
-                renderDashboard();
-            } catch (error) {
-                document.getElementById('loadingIndicator').classList.add('hidden');
-                console.error('Error loading campaigns:', error);
-            }
-        }
-
-        async function syncData() {
-            try {
-                const response = await fetch(`${BACKEND_URL}/api/sync`, { method: 'POST' });
-                const data = await response.json();
-                alert(`✅ Sincronizados ${data.count} campañas`);
-                loadCampaigns();
-            } catch (error) {
-                alert('Error al sincronizar: ' + error.message);
-            }
-        }
-
         function showDashboard() {
             document.getElementById('loginPage').classList.add('hidden');
             document.getElementById('dashboardPage').classList.remove('hidden');
+            allCampaigns = mockData;
+            filteredCampaigns = allCampaigns;
             initializeDateRange();
-            loadCampaigns();
+            renderDashboard();
         }
 
         function initializeDateRange() {
             const today = new Date();
             const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-
             document.getElementById('dateFrom').valueAsDate = firstDay;
             document.getElementById('dateTo').valueAsDate = today;
-            document.getElementById('reportFrom').valueAsDate = firstDay;
-            document.getElementById('reportTo').valueAsDate = today;
         }
 
         function applyFilters() {
             const filterType = document.getElementById('filterType').value;
-
             filteredCampaigns = allCampaigns.filter(c => {
                 if (filterType === 'active') return c.status === 'ACTIVE';
-                if (filterType === 'inactive') return c.status === 'PAUSED';
+                if (filterType === 'inactive') return c.status !== 'ACTIVE';
                 return true;
             });
-
             renderDashboard();
         }
 
         function renderDashboard() {
             const active = filteredCampaigns.filter(c => c.spent > 0);
-
             const totalSpent = active.reduce((s, c) => s + c.spent, 0);
             const totalConv = active.reduce((s, c) => s + c.conversions, 0);
-            const avgRoas = active.length ? (active.reduce((s, c) => s + parseFloat(c.roas), 0) / active.length).toFixed(2) : 0;
-            const avgCpm = active.length ? (active.reduce((s, c) => s + parseFloat(c.cpm), 0) / active.length).toFixed(2) : 0;
+            const avgRoas = active.length ? (active.reduce((s, c) => s + c.roas, 0) / active.length).toFixed(2) : 0;
+            const avgCpm = active.length ? (active.reduce((s, c) => s + c.cpm, 0) / active.length).toFixed(2) : 0;
 
             document.getElementById('kpisContainer').innerHTML = `
-                <div class="kpi">
-                    <div class="kpi-label">Gasto Total</div>
-                    <div class="kpi-value">$${totalSpent.toFixed(2)}</div>
-                </div>
-                <div class="kpi">
-                    <div class="kpi-label">Conversiones</div>
-                    <div class="kpi-value">${totalConv}</div>
-                </div>
-                <div class="kpi">
-                    <div class="kpi-label">ROAS Promedio</div>
-                    <div class="kpi-value">${avgRoas}x</div>
-                </div>
-                <div class="kpi">
-                    <div class="kpi-label">CPM Promedio</div>
-                    <div class="kpi-value">$${avgCpm}</div>
-                </div>
+                <div class="kpi"><div class="kpi-label">Gasto Total</div><div class="kpi-value">$${totalSpent.toFixed(2)}</div></div>
+                <div class="kpi"><div class="kpi-label">Conversiones</div><div class="kpi-value">${totalConv}</div></div>
+                <div class="kpi"><div class="kpi-label">ROAS Promedio</div><div class="kpi-value">${avgRoas}x</div></div>
+                <div class="kpi"><div class="kpi-label">CPM Promedio</div><div class="kpi-value">$${avgCpm}</div></div>
             `;
-
-            const recs = [];
-            if (avgRoas < 1.5) recs.push('🔴 ROAS bajo: revisa el flujo de compra');
-            if (active.some(c => c.roas > 3)) recs.push('✅ Escala: algunas campañas tienen ROAS > 3x');
-
-            if (recs.length > 0) {
-                document.getElementById('recommendationsContainer').innerHTML = `
-                    <div class="recommendations">
-                        <h4>💡 Recomendaciones</h4>
-                        ${recs.map(r => `<div class="rec-item">• ${r}</div>`).join('')}
-                    </div>
-                `;
-            }
 
             renderCharts(active);
             renderCampaignsTable();
@@ -570,74 +225,32 @@
             const labels = campaigns.map(c => c.name.substring(0, 15));
 
             if (charts.roas) charts.roas.destroy();
-            const ctx1 = document.getElementById('roasChart');
-            if (ctx1) {
-                charts.roas = new Chart(ctx1, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'ROAS',
-                            data: campaigns.map(c => c.roas),
-                            backgroundColor: '#3b82f6'
-                        }]
-                    },
-                    options: { responsive: true, plugins: { legend: { display: false } } }
-                });
-            }
+            charts.roas = new Chart(document.getElementById('roasChart'), {
+                type: 'bar',
+                data: { labels, datasets: [{ label: 'ROAS', data: campaigns.map(c => c.roas), backgroundColor: '#3b82f6' }] },
+                options: { responsive: true, plugins: { legend: { display: false } } }
+            });
 
             if (charts.spend) charts.spend.destroy();
-            const ctx2 = document.getElementById('spendChart');
-            if (ctx2) {
-                charts.spend = new Chart(ctx2, {
-                    type: 'doughnut',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            data: campaigns.map(c => c.spent),
-                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444']
-                        }]
-                    },
-                    options: { responsive: true }
-                });
-            }
+            charts.spend = new Chart(document.getElementById('spendChart'), {
+                type: 'doughnut',
+                data: { labels, datasets: [{ data: campaigns.map(c => c.spent), backgroundColor: ['#3b82f6', '#10b981', '#f59e0b'] }] },
+                options: { responsive: true }
+            });
 
             if (charts.cpm) charts.cpm.destroy();
-            const ctx3 = document.getElementById('cpmChart');
-            if (ctx3) {
-                charts.cpm = new Chart(ctx3, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'CPM',
-                            data: campaigns.map(c => c.cpm),
-                            borderColor: '#f59e0b',
-                            backgroundColor: 'rgba(245,158,11,0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }]
-                    },
-                    options: { responsive: true, plugins: { legend: { display: false } } }
-                });
-            }
+            charts.cpm = new Chart(document.getElementById('cpmChart'), {
+                type: 'line',
+                data: { labels, datasets: [{ label: 'CPM', data: campaigns.map(c => c.cpm), borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,0.1)', tension: 0.4, fill: true }] },
+                options: { responsive: true, plugins: { legend: { display: false } } }
+            });
 
             if (charts.conversion) charts.conversion.destroy();
-            const ctx4 = document.getElementById('conversionChart');
-            if (ctx4) {
-                charts.conversion = new Chart(ctx4, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Conversiones',
-                            data: campaigns.map(c => c.conversions),
-                            backgroundColor: '#10b981'
-                        }]
-                    },
-                    options: { responsive: true, plugins: { legend: { display: false } } }
-                });
-            }
+            charts.conversion = new Chart(document.getElementById('conversionChart'), {
+                type: 'bar',
+                data: { labels, datasets: [{ label: 'Conversiones', data: campaigns.map(c => c.conversions), backgroundColor: '#10b981' }] },
+                options: { responsive: true, plugins: { legend: { display: false } } }
+            });
         }
 
         function renderCampaignsTable() {
@@ -645,57 +258,19 @@
             tbody.innerHTML = filteredCampaigns.map(c => `
                 <tr>
                     <td><strong>${c.name}</strong></td>
-                    <td><span class="status-${c.status === 'ACTIVE' ? 'active' : 'inactive'}">${c.status === 'ACTIVE' ? '✅ Activa' : '⏸️ Pausada'}</span></td>
+                    <td><span class="status-active">${c.status === 'ACTIVE' ? '✅ Activa' : '⏸️ Pausada'}</span></td>
                     <td>$${c.spent.toFixed(2)}</td>
                     <td>${c.impressions.toLocaleString()}</td>
-                    <td>$${parseFloat(c.cpm).toFixed(2)}</td>
+                    <td>$${c.cpm.toFixed(2)}</td>
                     <td>${c.conversions}</td>
-                    <td class="${parseFloat(c.roas) > 1.5 ? 'roas-good' : 'roas-bad'}">${c.roas}x</td>
+                    <td class="${c.roas > 1.5 ? 'roas-good' : 'roas-bad'}">${c.roas.toFixed(2)}x</td>
                 </tr>
             `).join('');
-        }
-
-        function generateReport() {
-            const dateFrom = document.getElementById('reportFrom').value;
-            const dateTo = document.getElementById('reportTo').value;
-            const active = filteredCampaigns.filter(c => c.spent > 0);
-
-            const totalSpent = active.reduce((s, c) => s + c.spent, 0);
-            const totalConv = active.reduce((s, c) => s + c.conversions, 0);
-            const avgRoas = active.length ? (active.reduce((s, c) => s + parseFloat(c.roas), 0) / active.length).toFixed(2) : 0;
-            const topCampaign = active.length ? active.reduce((p, c) => parseFloat(c.roas) > parseFloat(p.roas) ? c : p) : null;
-
-            let html = `
-                <div style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #e2e8f0;">
-                    <div style="font-weight: 600; color: #64748b; font-size: 12px; text-transform: uppercase; margin-bottom: 12px;">📊 Resumen</div>
-                    <div style="color: #475569; line-height: 1.6;">
-                        <p><strong>Período:</strong> ${dateFrom} al ${dateTo}</p>
-                        <div style="background: #fef3c7; padding: 12px; border-radius: 8px; border-left: 4px solid #f59e0b; margin: 12px 0;">
-                            <strong>💰 Inversión Total:</strong> $${totalSpent.toFixed(2)}<br>
-                            <strong>🎯 Conversiones:</strong> ${totalConv} compras<br>
-                            <strong>📈 ROAS Promedio:</strong> ${avgRoas}x<br>
-                            <strong>📊 Campañas Activas:</strong> ${active.length}
-                        </div>
-                    </div>
-                </div>
-                ${topCampaign ? `
-                <div style="margin-bottom: 24px;">
-                    <div style="font-weight: 600; color: #64748b; font-size: 12px; text-transform: uppercase; margin-bottom: 12px;">🔥 Mejor Performer</div>
-                    <div style="color: #475569;">
-                        <p><strong>${topCampaign.name}</strong></p>
-                        <p>ROAS: <span style="color: #10b981; font-weight: 600;">${topCampaign.roas}x</span> | Gasto: $${topCampaign.spent.toFixed(2)} | Conversiones: ${topCampaign.conversions}</p>
-                    </div>
-                </div>
-                ` : ''}
-            `;
-
-            document.getElementById('reportContainer').innerHTML = html;
         }
 
         function switchTab(tab) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            
             document.getElementById(tab).classList.add('active');
             event.target.classList.add('active');
         }
